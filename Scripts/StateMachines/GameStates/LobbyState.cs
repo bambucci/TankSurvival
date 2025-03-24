@@ -19,6 +19,7 @@ namespace Core.StateMachines.GameStates
 
         public void OnExit()
         {
+            
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Core.Services
             var newUnit = LeanPool.Spawn(config.Prefab, position, rotation, parent);
             var enemyController = newUnit.GetComponent<EnemyController>();
             enemyController.Construct(config, _gameplayData.PlayerController, _damageDealer);
-            enemyController.DeathEvent.AddListener(() => _gameplayData.EnemyDied(enemyController));
+            enemyController.DeathEvent.AddListener(() => _gameplayData.RemoveEnemy(enemyController));
             
             _gameplayData.EnemiesAlive.Add(enemyController);
             return enemyController;

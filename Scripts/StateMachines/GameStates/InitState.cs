@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Core.StateMachines.GameStates
 {
     public class InitState : IState

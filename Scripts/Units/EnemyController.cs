@@ -53,12 +53,14 @@ namespace Core.Units
             var attackState = new EnemyAttackState(this, animator, _navMeshAgent, player, config);
             var deadState = new EnemyDeadState(this, animator, _navMeshAgent);
             var idleState = new EnemyIdleState(this, animator, _navMeshAgent);
+            var victoryDanceState = new EnemyVictoryDanceState(this, animator, _navMeshAgent);
             
             At(_spawnState, chaseState, new FuncPredicate(() => _spawnState.HasReachedDestination()));
             At(chaseState, attackState, new FuncPredicate(() => chaseState.HasReachedDestination()));
             At(attackState, chaseState, new FuncPredicate(() => !attackState.InAttackRange()));
             Any(deadState, new FuncPredicate(() => Health <= 0));
-            Any(idleState, new FuncPredicate(() => !player));
+            Any(victoryDanceState, new FuncPredicate(() => !player));
+            At(victoryDanceState, attackState, new FuncPredicate(() => player));
             
             _stateMachine.SetState(_spawnState);
         }
@@ -80,11 +82,9 @@ namespace Core.Units
                 LeanPool.Spawn(deathFX);
         }
 
-        private void OnDead()
-        {
-            LeanPool.Despawn(gameObject);
-        }
-
+        private void OnDead() => Despawn();
+        public void Despawn() => LeanPool.Despawn(gameObject);
+        
         public override void ApplyKnockback(Vector3 knockbackVector)
         {
             _navMeshAgent.velocity = knockbackVector;

@@ -25,6 +25,10 @@ namespace Core.Managers
         {
             Application.targetFrameRate = targetFrameRate;
             mainCamera.depthTextureMode = depthTexture ? DepthTextureMode.Depth : DepthTextureMode.None;
+        }
+
+        public void AssignPlayer()
+        {
             virtualCamera.m_Follow = _gameplayData.PlayerController.transform;
         }
 

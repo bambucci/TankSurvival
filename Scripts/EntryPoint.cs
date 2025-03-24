@@ -1,53 +1,21 @@
-using Core.Data;
 using Core.Managers;
-using Core.ScriptableObjects;
 using Core.Services;
-using Core.Stats;
-using UnityEngine;
-using UnityEngine.Serialization;
-using VContainer;
 using VContainer.Unity;
 
 namespace Core
 {
-    public class EntryPoint : LifetimeScope
+    public class EntryPoint : IInitializable
     {
-        [SerializeField] private GameConfig gameConfig;
-        [SerializeField] private CameraManager cameraManager;
-        [SerializeField] private WaveSpawnManager waveSpawnManager;
-        [SerializeField] private InputManager inputManager;
-        [SerializeField] private PopUpTextManager popUpTextManager;
+        private readonly GameStateManager _gameStateManager;
         
-        protected override void Configure(IContainerBuilder builder)
+        public EntryPoint(GameStateManager gameStateManager)
         {
-            Data(builder);
-            UnityObjects(builder);
-            Services(builder);
+            _gameStateManager = gameStateManager;
         }
-
-        private static void Services(IContainerBuilder builder)
+        
+        public void Initialize()
         {
-            builder.RegisterEntryPoint<GameStarter>();
-            builder.Register<LevelManager>(Lifetime.Singleton);
-            builder.Register<UnitFactory>(Lifetime.Singleton);
-            builder.Register<WeaponFactory>(Lifetime.Singleton);
-            builder.Register<ProjectileFactory>(Lifetime.Singleton);
-            builder.Register<DamageDealer>(Lifetime.Singleton);
-            builder.Register<StatHandler>(Lifetime.Singleton);
-        }
-
-        private static void Data(IContainerBuilder builder)
-        {
-            builder.Register<GameplayData>(Lifetime.Singleton);
-        }
-
-        private void UnityObjects(IContainerBuilder builder)
-        {
-            builder.RegisterComponent(cameraManager);
-            builder.RegisterComponent(gameConfig);
-            builder.RegisterComponent(waveSpawnManager);
-            builder.RegisterComponent(inputManager);
-            builder.RegisterComponent(popUpTextManager);
+            _gameStateManager.Initialize();
         }
     }
 }
